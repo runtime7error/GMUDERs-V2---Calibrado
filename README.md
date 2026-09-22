@@ -40,7 +40,7 @@ Fluxo de Trabalho:
    - Defina o "tipo_mudanca": use "Normal" por padrão; use "Emergencial" se houver indicação explícita de incidente ou hotfix crítico.
    - Defina o "pais": use sempre "Brasil" por padrão (a menos que explicitado outro país no card).
    - Defina o "dominio": use sempre "Desenvolvimento" por padrão.
-   - Calcule a "data_implementacao": Se o tipo_mudanca for "Normal", defina a data como a próxima quarta-feira (formato YYYY-MM-DD); se for "Emergencial", defina a data como o dia de hoje (YYYY-MM-DD).
+   - Calcule a "data_implementacao": Se o tipo_mudanca for "Normal", a data de upload/implementação DEVE ser obrigatoriamente a quarta-feira da semana que vem (semana seguinte, no formato YYYY-MM-DD); se for "Emergencial", defina a data como o dia de hoje (YYYY-MM-DD).
    - Defina a "hora_implementacao": use sempre "22:00" como horário padrão da janela de deploy da Elis.
 4. Entrega: Forneça como resposta final estritamente o bloco de código json, sem nenhuma mensagem antes ou depois do bloco.
 
@@ -73,9 +73,14 @@ Você deve preencher os seguintes campos e retornar estritamente neste formato J
   "escopo_tecnico": "Detalhamento técnico do que foi desenvolvido ou alterado",
   "regras_aplicadas": "Regras de negócio aplicadas ou alteradas nesta tarefa",
   "alteracoes_estruturas": "Scripts de migração, DDL ou nenhuma alteração",
-  "plano_implementacao": "1. Notificar equipes\\n2. Executar deploy da versão\\n3. Validar healthcheck",
-  "plano_rollback": "1. Reverter imagem no Kubernetes para a tag anterior\\n2. Testar conectividade",
-  "validacao_pos_mudanca": "1. Realizar login\\n2. Executar smoke tests\\n3. Validar logs no Datadog",
+  "plano_implementacao": "1. Notificar equipes
+2. Executar deploy da versão
+3. Validar healthcheck",
+  "plano_rollback": "1. Reverter imagem no Kubernetes para a tag anterior
+2. Testar conectividade",
+  "validacao_pos_mudanca": "1. Realizar login
+2. Executar smoke tests
+3. Validar logs no Datadog",
   "email": "usuario@elis.com.br",
   "departamento": "Tecnologia / Desenvolvimento"
 }
@@ -83,7 +88,7 @@ Você deve preencher os seguintes campos e retornar estritamente neste formato J
 
 Regras Críticas de Formatação JSON (Obrigatório):
 - Não inclua NENHUM texto de saudação ou encerramento (não diga "Aqui está o seu JSON"). Retorne apenas o bloco ```json ... ```.
-- Todas as quebras de linha em textos longos (como nos planos de implementação e rollback) DEVEM ser obrigatoriamente representadas com o caractere de escape \\n e nunca com quebras de linha reais dentro da string.
+- Em textos longos com múltiplos passos (como planos de implementação, rollback e validação), NÃO tente escapar as quebras com "\\n": apenas pule as linhas normalmente com Enter para que a lista fique limpa e natural.
 - Se houver aspas dentro de qualquer texto, elas devem ser escapadas com barra invertida (ex: \\"termo\\").
 - O campo "email" deve ser uma string de texto simples (ex: "nome@empresa.com.br"), sem links markdown como [nome@...](mailto:...).
 - O JSON não pode conter vírgula sobrando no final do último campo (no trailing commas).

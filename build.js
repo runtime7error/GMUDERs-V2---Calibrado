@@ -630,7 +630,34 @@ const source = `(function(){
     try {
       var raw = inp.value.trim();
       raw = raw.replace(/^\\x60{3}json\\s*/i, '').replace(/^\\x60{3}\\s*/, '').replace(/\\x60{3}$/, '').trim();
-      var data = JSON.parse(raw);
+
+      var sanitized = '';
+      var inStr = false;
+      var esc = false;
+      for(var sIdx = 0; sIdx < raw.length; sIdx++){
+        var ch = raw[sIdx];
+        if(ch === '"' && !esc){
+          inStr = !inStr;
+          sanitized += ch;
+        } else if(inStr){
+          if(ch === '\\n'){
+            sanitized += '\\\\n';
+          } else if(ch === '\\r'){
+            // ignora retorno de carro
+          } else {
+            sanitized += ch;
+          }
+        } else {
+          sanitized += ch;
+        }
+        if(ch === '\\\\' && !esc){
+          esc = true;
+        } else {
+          esc = false;
+        }
+      }
+
+      var data = JSON.parse(sanitized);
       var norm = {};
       Object.keys(data).forEach(function(k){ norm[k.toLowerCase().replace(/[\\s-_]/g, '')] = data[k]; });
 
