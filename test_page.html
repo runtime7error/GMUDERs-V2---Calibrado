@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador TOPdesk - Nova Requisição de Mudança (GMUD)</title>
+  <style>
+    :root {
+      --topdesk-blue: #003366;
+      --topdesk-light-blue: #e8f0fe;
+      --topdesk-border: #ccd0d5;
+      --topdesk-text: #2c3e50;
+      --topdesk-bg: #f4f6f9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: var(--topdesk-bg);
+      color: var(--topdesk-text);
+    }
+
+    /* TOPdesk Navigation Bar */
+    header {
+      background-color: var(--topdesk-blue);
+      color: #ffffff;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: bold;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-demo {
+      background: #ffc107;
+      color: #333;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 24px auto;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid var(--topdesk-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .form-header {
+      padding: 16px 24px;
+      background: #fafbfc;
+      border-bottom: 1px solid var(--topdesk-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--topdesk-blue);
+    }
+
+    .instruction-box {
+      margin: 16px 24px;
+      padding: 12px 16px;
+      background-color: #e0f2fe;
+      border-left: 4px solid #0284c7;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #0369a1;
+    }
+
+    form {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .required::after {
+      content: " *";
+      color: #e53e3e;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--topdesk-border);
+      border-radius: 4px;
+      font-size: 13px;
+      color: #2d3748;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    /* Simulador de Editor Rico do TOPdesk */
+    .rich-editor-box {
+      border: 1px solid var(--topdesk-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .rich-editor-toolbar {
+      background: #f1f5f9;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--topdesk-border);
+      display: flex;
+      gap: 6px;
+    }
+
+    .rich-editor-toolbar button {
+      background: none;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .rich-content {
+      min-height: 100px;
+      padding: 10px;
+      background: #fff;
+      outline: none;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .rich-content:focus {
+      background: #fefefe;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--topdesk-border);
+    }
+
+    .btn-topdesk-primary {
+      background: #005bb7;
+      color: #ffffff;
+      padding: 9px 20px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-topdesk-primary:hover {
+      background: #00468c;
+    }
+
+    .btn-topdesk-secondary {
+      background: #fff;
+      border: 1px solid var(--topdesk-border);
+      color: #4a5568;
+      padding: 9px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-topdesk-secondary:hover {
+      background: #f7fafc;
+    }
+  </style>
+
+  <!-- Inclui diretamente o script e estilo do GMUDERs para permitir testar sem instalar extensão se desejar! -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo-area">
+      <span>TOPdesk Service Management</span>
+      <span class="badge-demo">Ambiente de Simulação GMUD</span>
+    </div>
+    <div>Operador: Lucas Nascimento (Engenharia de Mudanças)</div>
+  </header>
+
+  <div class="container">
+    <div class="form-header">
+      <div class="form-title">Requisição de Mudança (GMUD) - Nova</div>
+      <div>Status: <strong>Rascunho</strong></div>
+    </div>
+
+    <div class="instruction-box">
+      💡 <strong>Como testar o GMUDERs v2 nesta página:</strong><br>
+      Clique no botão flutuante <strong>🪄 GMUDERs v2</strong> no canto inferior direito da tela. Em seguida, clique em <strong>⚡ Carregar Exemplo de GMUD</strong> (ou cole o seu JSON) e clique em <strong>🚀 Preencher no TOPdesk</strong>. Os campos abaixo serão preenchidos automaticamente!
+    </div>
+
+    <form id="gmudForm" onsubmit="event.preventDefault(); alert('Chamado salvo com sucesso com os dados preenchidos!');">
+      <!-- Qual o Tipo de GMUD -->
+      <div class="field-group">
+        <label class="required">Qual o Tipo de GMUD</label>
+        <div style="display: flex; gap: 20px; align-items: center; margin-top: 6px;">
+          <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;" for="ssdform35242390080846779fee97db46d8fea5_checkbox2_checkbox_checkbox">
+            <input type="checkbox" name="tipoGmud" id="ssdform35242390080846779fee97db46d8fea5_checkbox2_checkbox_checkbox" value="Normal"> Normal
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; cursor: pointer;" for="ssdform35242390080846779fee97db46d8fea5_checkbox1_checkbox_checkbox">
+            <input type="checkbox" name="tipoGmud" id="ssdform35242390080846779fee97db46d8fea5_checkbox1_checkbox_checkbox" value="Emergencial"> Emergencial
+          </label>
+        </div>
+      </div>
+
+      <!-- Card do Jira -->
+      <div class="field-group">
+        <label for="ssdform35242390080846779fee97db46d8fea5_openquestion6_openquestion_openquestion" class="required">Card do Jira</label>
+        <input type="text" id="ssdform35242390080846779fee97db46d8fea5_openquestion6_openquestion_openquestion" placeholder="Ex: PROJ-1042">
+      </div>
+
+      <!-- Pais e Dominio -->
+      <div class="form-grid-2">
+        <div class="field-group">
+          <label for="ssdform35242390080846779fee97db46d8fea5_searchlist1_searchlist_searchlist" class="required">Pais *</label>
+          <select id="ssdform35242390080846779fee97db46d8fea5_searchlist1_searchlist_searchlist" name="selectPais">
+            <option value="">Selecione o país...</option>
+            <option value="Brasil" id="ssdform35242390080846779fee97db46d8fea5_searchlist1_searchlist_searchlist_option0">Brasil</option>
+            <option value="Chile">Chile</option>
+            <option value="Colombia">Colômbia</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="ssdform35242390080846779fee97db46d8fea5_searchlist2_searchlist_searchlist" class="required">Dominio *</label>
+          <select id="ssdform35242390080846779fee97db46d8fea5_searchlist2_searchlist_searchlist" name="selectDominio">
+            <option value="">Selecione o domínio...</option>
+            <option value="Desenvolvimento" id="ssdform35242390080846779fee97db46d8fea5_searchlist2_searchlist_searchlist_option0">Desenvolvimento</option>
+            <option value="Infraestrutura">Infraestrutura</option>
+            <option value="Sistemas">Sistemas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Data/hora Implantação -->
+      <div class="field-group">
+        <label class="required">Data/hora Implantação</label>
+        <div style="display: flex; gap: 12px; max-width: 400px; margin-top: 4px;">
+          <input type="text" id="dt_implantacao" placeholder="DD/MM/AAAA" style="flex: 2;">
+          <input type="text" id="hr_implantacao" placeholder="HH:MM" style="flex: 1;">
+        </div>
+      </div>
+
+      <!-- Breve descrição * -->
+      <div class="field-group">
+        <label for="briefDescription" class="required">Breve descrição *</label>
+        <input type="text" id="briefDescription" name="briefDescription" placeholder="Ex: Deploy Release 2.4 - Correções do Módulo Fiscal" required>
+      </div>
+
+      <!-- Escopo Técnico Aplicado * -->
+      <div class="field-group">
+        <label for="escopoTecnico" class="required">Escopo Técnico Aplicado *</label>
+        <textarea id="escopoTecnico" name="escopoTecnico" placeholder="Detalhes dos itens, microsserviços e banco de dados alterados..."></textarea>
+      </div>
+
+      <!-- Plano de Implementação * -->
+      <div class="field-group">
+        <label class="required">Plano de Implementação *</label>
+        <textarea id="planoImplementacao" name="planoImplementacao" placeholder="Passo a passo da implementação..."></textarea>
+      </div>
+
+      <!-- Plano de Roolback * -->
+      <div class="field-group">
+        <label for="rollbackPlan" class="required">Plano de Roolback *</label>
+        <textarea id="rollbackPlan" name="rollbackPlan" placeholder="Procedimento detalhado caso a mudança precise ser revertida..."></textarea>
+      </div>
+
+      <!-- Validação Pós-Mudança -->
+      <div class="field-group">
+        <label for="testPlan" class="required">Validação Pós-Mudança (Testes)</label>
+        <textarea id="testPlan" name="testPlan" placeholder="Testes pós-deploy para validação da entrega..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-topdesk-secondary" onclick="document.getElementById('gmudForm').reset(); document.getElementById('actionPlan').innerHTML = '';">Limpar Formulário</button>
+        <button type="submit" class="btn-topdesk-primary">Salvar Mudança</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="content.js"></script>
+</body>
+</html>
